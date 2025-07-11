@@ -1,0 +1,13 @@
+package com.sportygroup.feed;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
+class SportyGroupFeedApplicationTests {
+
+	@Test
+	void contextLoads() {
+	}
+
+}

@@ -1,0 +1,113 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "http://exercise.com/schemas/sportygroup/request/providerAlpha.json",
+  "type": "object",
+  "definitions": {
+    "feedValues": {
+      "type": ["object", "null"],
+      "properties": {
+        "HOME_WIN": {
+          "description": "Describes Home team win",
+          "type": "number",
+          "minimum": 0
+
+        },
+        "DRAW": {
+          "description": "Describes Draw",
+          "type": "number",
+          "minimum": 0
+
+        },
+        "AWAY_WIN": {
+          "description": "Describes Away team win",
+          "type": "number",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "HOME_WIN",
+        "DRAW",
+        "AWAY_WIN"
+      ]
+    }
+  },
+  "properties": {
+    "messageType": {
+      "description": "Feed message type",
+      "type": "string",
+      "enum": [
+        "ODDS_UPDATE",
+        "SETTLEMENT"
+      ]
+    },
+    "event_id": {
+      "description": "Feed event ID",
+      "type": "string",
+      "maxLength": 150,
+      "pattern": "^[0-9A-Za-zÀ-ÿ\\s,._'#&-]*$"
+    },
+    "outcome": {
+      "description": "Feed outcome",
+      "type": ["string", "null"],
+      "enum": [
+        "HOME_WIN",
+        "DRAW",
+        "AWAY_WIN",
+        null
+      ]
+    },
+    "values": {
+      "$ref": "#/definitions/feedValues"
+    }
+  },
+  "required": [
+    "messageType",
+    "event_id"
+  ],
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "messageType": {
+            "const": "ODDS_UPDATE"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "values"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "messageType": {
+            "const": "SETTLEMENT"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "outcome"
+        ]
+      }
+    }
+  ],
+  "examples": [
+    {
+      "msg_type": "odds_update",
+      "event_id": "ev123",
+      "values": {
+        "1": 2.0,
+        "X": 3.1,
+        "2": 3.8
+      }
+    },
+    {
+      "msg_type": "settlement",
+      "event_id": "ev123",
+      "outcome": "1"
+    }
+  ]
+}
