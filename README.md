@@ -38,6 +38,3 @@
     }
 }
 '`
-
-### Debugging
-* Logs can be tailed by running `./docker/logs.sh`
