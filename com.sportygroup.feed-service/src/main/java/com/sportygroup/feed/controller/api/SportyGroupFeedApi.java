@@ -19,7 +19,7 @@ public interface SportyGroupFeedApi {
      * @param feedDto {@link FeedDto} the payload
      */
     @PostMapping(PROVIDER_TYPE_FEED)
-    @ResponseStatus(HttpStatus.ACCEPTED)
+    @ResponseStatus(HttpStatus.OK)
     void updateOdds(@PathVariable("provider-type") ProviderTypeEnum providerType,
                     @RequestBody FeedDto feedDto);
 }

@@ -6,6 +6,8 @@ import com.sportygroup.feed.dto.FeedDto;
 import com.sportygroup.feed.enums.ProviderTypeEnum;
 import com.sportygroup.feed.service.SportyGroupFeedService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.extern.log4j.Log4j2;
@@ -25,12 +27,12 @@ import static com.sportygroup.feed.constants.OpenApiTagsConstants.TAG_FEED;
 @RequestMapping(API_INTERNAL_VERSION)
 @Tag(name = TAG_FEED, description = "Endpoints for Sporty Group Feed operations")
 @Log4j2
-public class SportyGroupFeedApiImpl extends SportyGroupFeedController implements SportyGroupFeedApi{
+public class SportyGroupFeedApiImpl extends SportyGroupFeedController implements SportyGroupFeedApi {
 
     private final FeedDtoRequestValidator feedDtoRequestValidator;
 
     public SportyGroupFeedApiImpl(FeedDtoRequestValidator feedDtoRequestValidator,
-                                  SportyGroupFeedService sportyGroupFeedService){
+                                  SportyGroupFeedService sportyGroupFeedService) {
         super(sportyGroupFeedService);
         this.feedDtoRequestValidator = feedDtoRequestValidator;
     }
@@ -49,10 +51,21 @@ public class SportyGroupFeedApiImpl extends SportyGroupFeedController implements
     @Operation(
             summary = "Update odds for a specific event or final market results",
             description = "Update odds for a specific event or final results of markets for the event",
-            tags = {TAG_FEED}
-    )
+            tags = {TAG_FEED},
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Feed message processed successfully"),
+                    @ApiResponse(responseCode = "400", description = "Bad Request"),
+            })
     @Override
-    public void updateOdds(ProviderTypeEnum providerType, @Valid FeedDto feedDto) {
+    public void updateOdds(
+            @Parameter(
+                required = true,
+                description = "Specify providerType",
+                schema = @io.swagger.v3.oas.annotations.media.Schema(
+                        type = "string",
+                        allowableValues = { "provider-alpha", "provider-beta" }
+                )
+            ) ProviderTypeEnum providerType, @Valid FeedDto feedDto) {
         super.updateOdds(providerType, feedDto);
     }
 }
